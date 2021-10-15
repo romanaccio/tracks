@@ -3,10 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Text, Button, Input } from 'react-native-elements';
 import Spacer from '../components/Spacer';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import {
-  Context as AuthContext,
-  CredentialsInterface,
-} from '../context/AuthContext';
+import { Context as AuthContext, StateInterface } from '../context/AuthContext';
 import { AuthStackParamList } from '../types/types';
 import { isValidEmail, isValidPassword } from '../misc/misc';
 
@@ -16,6 +13,7 @@ const SignupScreen = ({ route, navigation }: Props) => {
   const authContext = useContext(AuthContext);
   console.log(authContext);
   const signup = authContext.signup;
+  const state: StateInterface = authContext.state;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -61,7 +59,9 @@ const SignupScreen = ({ route, navigation }: Props) => {
         />
       </Spacer>
       <Spacer>
-        <Text>{error}</Text>
+        <Text style={styles.error}>
+          {error} {state.errorMessage}
+        </Text>
       </Spacer>
     </View>
   );
@@ -75,5 +75,8 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 200,
+  },
+  error: {
+    color: 'red',
   },
 });

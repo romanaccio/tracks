@@ -1,8 +1,11 @@
 import createDataContext from './createDataContext';
 import trackerApi from '../API/tracker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AxiosResponse } from 'axios';
 
 export interface StateInterface {
-  isSignedin: boolean;
+  token: string | null;
+  errorMessage: string;
 }
 
 interface ActionInterface {
@@ -15,12 +18,18 @@ export interface CredentialsInterface {
   password: string;
 }
 
-const defaultState: StateInterface = { isSignedin: false };
+interface TokenInterface {
+  token: string;
+}
+const defaultState: StateInterface = { token: null, errorMessage: '' };
 
 const authReducer = (state: StateInterface, action: ActionInterface) => {
   switch (action.type) {
-    case 'sign_in':
-      return action.payload;
+    case 'add_error':
+      return { ...state, errorMessage: action.payload };
+
+    case 'sign_up':
+      return { ...state, token: action.payload, errorMessage: '' };
     default:
       return state;
   }
@@ -30,13 +39,20 @@ const signup = (dispatch: Function) => {
   return async ({ email, password }: CredentialsInterface) => {
     // 1. make api request to sign up
     try {
-      const response = trackerApi.post('/signup', { email, password });
-      // 2. if successful, update state
-      console.log((await response).data);
-      //dispatch({ type: 'sign_out', payload: true });
+      const response: AxiosResponse<TokenInterface> = await trackerApi.post(
+        '/signup',
+        { email, password }
+      );
+      const data = response.data;
+      // 2. if successful, save token and update state
+      await AsyncStorage.setItem('token', data.token);
+      dispatch({ type: 'sign_up', payload: data.token });
     } catch (err) {
       // 3. if error, display an error somehow
-      console.log(err);
+      dispatch({
+        type: 'add_error',
+        payload: 'Something went wrong during sign up',
+      });
     }
   };
 };
