@@ -8,6 +8,8 @@ import {
   CredentialsInterface,
 } from '../context/AuthContext';
 import { AuthStackParamList } from '../types/types';
+import { isValidEmail, isValidPassword } from '../misc/misc';
+
 type Props = NativeStackScreenProps<AuthStackParamList, 'Signup'>;
 
 const SignupScreen = ({ route, navigation }: Props) => {
@@ -16,6 +18,7 @@ const SignupScreen = ({ route, navigation }: Props) => {
   const signup = authContext.signup;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   return (
     <View style={styles.container}>
@@ -46,9 +49,19 @@ const SignupScreen = ({ route, navigation }: Props) => {
         <Button
           title='Sign Up'
           onPress={() => {
-            signup({ email, password });
+            if (!isValidEmail(email)) {
+              setError('Email format is invalid');
+            } else if (!isValidPassword(password)) {
+              setError('Password is too short');
+            } else {
+              setError('');
+              signup({ email, password });
+            }
           }}
         />
+      </Spacer>
+      <Spacer>
+        <Text>{error}</Text>
       </Spacer>
     </View>
   );
