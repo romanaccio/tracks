@@ -14,8 +14,20 @@ const authStack = createNativeStackNavigator();
 function AuthFlow() {
   return (
     <authStack.Navigator>
-      <authStack.Screen name='Signup' component={SignupScreen} />
-      <authStack.Screen name='Signin' component={SigninScreen} />
+      <authStack.Screen
+        name='Signup'
+        component={SignupScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <authStack.Screen
+        name='Signin'
+        component={SigninScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
     </authStack.Navigator>
   );
 }
@@ -56,7 +68,13 @@ export default function Navigation() {
             headerShown: false,
           }}
         />
-        <switchStack.Screen name='Tab' component={TabFlow} />
+        <switchStack.Screen
+          name='Tab'
+          component={TabFlow}
+          options={{
+            headerShown: false,
+          }}
+        />
       </switchStack.Navigator>
     </NavigationContainer>
   );
