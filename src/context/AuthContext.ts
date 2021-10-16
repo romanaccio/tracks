@@ -2,6 +2,7 @@ import createDataContext from './createDataContext';
 import trackerApi from '../API/tracker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AxiosResponse } from 'axios';
+import { navigate } from '../navigation/navigationRef';
 
 export interface StateInterface {
   token: string | null;
@@ -44,9 +45,10 @@ const signup = (dispatch: Function) => {
         { email, password }
       );
       const data = response.data;
-      // 2. if successful, save token and update state
+      // 2. if successful, save token, update state, then go to main flow
       await AsyncStorage.setItem('token', data.token);
       dispatch({ type: 'sign_up', payload: data.token });
+      navigate('Tab', undefined);
     } catch (err) {
       // 3. if error, display an error somehow
       dispatch({

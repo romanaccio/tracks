@@ -10,6 +10,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { navigationRef } from '../navigation/navigationRef';
+
 const authStack = createNativeStackNavigator();
 function AuthFlow() {
   return (
@@ -36,7 +38,13 @@ const listDetailStack = createNativeStackNavigator();
 function ListDetailFlow() {
   return (
     <listDetailStack.Navigator>
-      <listDetailStack.Screen name='TrackList' component={TrackListScreen} />
+      <listDetailStack.Screen
+        name='TrackList'
+        component={TrackListScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <listDetailStack.Screen
         name='TrackDetail'
         component={TrackDetailScreen}
@@ -49,9 +57,9 @@ const tabStack = createBottomTabNavigator();
 function TabFlow() {
   return (
     <tabStack.Navigator>
-      <tabStack.Screen name='Account' component={AccountScreen} />
-      <tabStack.Screen name='TrackCreate' component={TrackCreateScreen} />
       <tabStack.Screen name='ListDetail' component={ListDetailFlow} />
+      <tabStack.Screen name='TrackCreate' component={TrackCreateScreen} />
+      <tabStack.Screen name='Account' component={AccountScreen} />
     </tabStack.Navigator>
   );
 }
@@ -59,7 +67,7 @@ const switchStack = createNativeStackNavigator();
 
 export default function Navigation() {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <switchStack.Navigator>
         <switchStack.Screen
           name='Auth'
