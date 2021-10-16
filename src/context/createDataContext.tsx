@@ -9,7 +9,6 @@ export default (
   initialState: any
 ) => {
   const Context = React.createContext(initialState);
-  console.log('DEBUG actions: ', actions);
   const Provider = ({ children }: any) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -17,7 +16,6 @@ export default (
     for (let key in actions) {
       boundActions[key] = actions[key](dispatch);
     }
-    console.log('DEBUG boundActions: ', boundActions);
 
     return (
       <Context.Provider value={{ state, ...boundActions }}>

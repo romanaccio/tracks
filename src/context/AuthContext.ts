@@ -70,9 +70,9 @@ const signin = (dispatch: Function) => {
 const signout = (dispatch: Function) => {
   return async () => {
     // 1. do something to sign out
-    // 2. if successful, update state
-    // 3. if error, display an error somehow
-    // dispatch({ type: 'sign_out', payload: true });
+    await AsyncStorage.setItem('token', '');
+    dispatch({ type: 'sign_up', payload: '' });
+    navigate('Auth', undefined);
   };
 };
 
