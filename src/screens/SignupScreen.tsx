@@ -6,7 +6,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Context as AuthContext, StateInterface } from '../context/AuthContext';
 import { AuthStackParamList } from '../types/types';
 import AuthenticationForm from '../components/AuthenticationForm';
-
+import NavLink from '../components/NavLink';
 type Props = NativeStackScreenProps<AuthStackParamList, 'Signup'>;
 
 const SignupScreen = ({ route, navigation }: Props) => {
@@ -16,17 +16,15 @@ const SignupScreen = ({ route, navigation }: Props) => {
 
   return (
     <View style={styles.container}>
-      <AuthenticationForm title='Sign up for Tracker' onPress={signup} />
-      <Spacer>
-        <Text style={styles.error}>{state.errorMessage}</Text>
-      </Spacer>
-      <Pressable onPress={() => navigation.navigate('Signin')}>
-        <Spacer>
-          <Text style={styles.link}>
-            Already have an account? Sign in instead
-          </Text>
-        </Spacer>
-      </Pressable>
+      <AuthenticationForm
+        title='Sign up for Tracker'
+        errorMessage={state.errorMessage}
+        onPress={signup}
+      />
+      <NavLink
+        text='Already have an account? Sign in instead'
+        routeName='Signin'
+      />
     </View>
   );
 };
@@ -44,5 +42,6 @@ const styles = StyleSheet.create({
   },
   link: {
     color: 'blue',
+    fontSize: 20,
   },
 });

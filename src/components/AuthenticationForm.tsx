@@ -11,15 +11,16 @@ export interface CredentialsInterface {
 
 type Props = {
   title: string;
+  errorMessage: string;
   onPress({ email, password }: CredentialsInterface): Function;
 };
-const AuthenticationForm = ({ title, onPress }: Props) => {
+const AuthenticationForm = ({ title, errorMessage, onPress }: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   return (
-    <View style={styles.container}>
+    <>
       <Spacer>
         <Text h3>{title}</Text>
       </Spacer>
@@ -59,19 +60,17 @@ const AuthenticationForm = ({ title, onPress }: Props) => {
         />
       </Spacer>
       <Spacer>
-        <Text style={styles.error}>{error}</Text>
+        <Text style={styles.error}>
+          {error} {errorMessage}
+        </Text>
       </Spacer>
-    </View>
+    </>
   );
 };
 
 export default AuthenticationForm;
 
 const styles = StyleSheet.create({
-  container: {
-    //flex: 1,
-    justifyContent: 'center',
-  },
   error: {
     color: 'red',
   },
