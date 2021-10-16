@@ -7,6 +7,7 @@ import { navigate } from '../navigation/navigationRef';
 export interface StateInterface {
   token: string | null;
   errorMessage: string;
+  email: string;
 }
 
 interface ActionInterface {
@@ -22,15 +23,24 @@ export interface CredentialsInterface {
 interface TokenInterface {
   token: string;
 }
-const defaultState: StateInterface = { token: null, errorMessage: '' };
+const defaultState: StateInterface = {
+  token: null,
+  errorMessage: '',
+  email: '',
+};
 
 const authReducer = (state: StateInterface, action: ActionInterface) => {
   switch (action.type) {
     case 'add_error':
-      return { ...state, errorMessage: action.payload };
+      return { ...state, errorMessage: action.payload.errorMessage };
 
-    case 'sign_up':
-      return { ...state, token: action.payload, errorMessage: '' };
+    case 'update_credentials':
+      return {
+        ...state,
+        token: action.payload.token,
+        email: action.payload.email,
+        errorMessage: '',
+      };
     default:
       return state;
   }
@@ -47,13 +57,16 @@ const signup = (dispatch: Function) => {
       const data = response.data;
       // 2. if successful, save token, update state, then go to main flow
       await AsyncStorage.setItem('token', data.token);
-      dispatch({ type: 'sign_up', payload: data.token });
+      dispatch({
+        type: 'update_credentials',
+        payload: { token: data.token, email },
+      });
       navigate('Tab', undefined);
     } catch (err) {
       // 3. if error, display an error somehow
       dispatch({
         type: 'add_error',
-        payload: 'Something went wrong during sign up',
+        payload: { errorMessage: 'Something went wrong during sign up' },
       });
     }
   };
@@ -61,9 +74,27 @@ const signup = (dispatch: Function) => {
 const signin = (dispatch: Function) => {
   return async ({ email, password }: CredentialsInterface) => {
     // 1. make api request to sign in
-    // 2. if successful, update state
-    // 3. if error, display an error somehow
-    // dispatch({ type: 'sign_in', payload: true });
+    try {
+      const response: AxiosResponse<TokenInterface> = await trackerApi.post(
+        '/signin',
+        { email, password }
+      );
+      const data = response.data;
+      // 2. if successful, save token, update state, then go to main flow
+      await AsyncStorage.setItem('token', data.token);
+      dispatch({
+        type: 'update_credentials',
+        payload: { token: data.token, email },
+      });
+      navigate('Tab', undefined);
+    } catch (err) {
+      // 3. if error, display an error somehow
+      console.log(err);
+      dispatch({
+        type: 'add_error',
+        payload: { errorMessage: 'Something went wrong during sign in' },
+      });
+    }
   };
 };
 
@@ -71,7 +102,7 @@ const signout = (dispatch: Function) => {
   return async () => {
     // 1. do something to sign out
     await AsyncStorage.setItem('token', '');
-    dispatch({ type: 'sign_up', payload: '' });
+    dispatch({ type: 'sign_up', payload: { token: '', email: '' } });
     navigate('Auth', undefined);
   };
 };

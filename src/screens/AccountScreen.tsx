@@ -5,11 +5,14 @@ import Spacer from '../components/Spacer';
 import { Context as AuthContext, StateInterface } from '../context/AuthContext';
 
 const AccountScreen = () => {
-  const { signout } = useContext(AuthContext);
+  const { state, signout } = useContext(AuthContext);
   return (
     <View style={styles.container}>
       <Spacer>
         <Text h3>Sign out from Tracker</Text>
+      </Spacer>
+      <Spacer>
+        <Text h4>Hi {state.email}</Text>
       </Spacer>
       <Button
         title='Sign Out'
