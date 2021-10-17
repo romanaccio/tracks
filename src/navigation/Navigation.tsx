@@ -1,4 +1,5 @@
 import React from 'react';
+import AuthLoadingScreen from '../screens/AuthLoadingScreen';
 import SigninScreen from '../screens/SigninScreen';
 import SignupScreen from '../screens/SignupScreen';
 import TrackCreateScreen from '../screens/TrackCreateScreen';
@@ -57,9 +58,27 @@ const tabStack = createBottomTabNavigator();
 function TabFlow() {
   return (
     <tabStack.Navigator>
-      <tabStack.Screen name='ListDetail' component={ListDetailFlow} />
-      <tabStack.Screen name='TrackCreate' component={TrackCreateScreen} />
-      <tabStack.Screen name='Account' component={AccountScreen} />
+      <tabStack.Screen
+        name='ListDetail'
+        component={ListDetailFlow}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <tabStack.Screen
+        name='TrackCreate'
+        component={TrackCreateScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <tabStack.Screen
+        name='Account'
+        component={AccountScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
     </tabStack.Navigator>
   );
 }
@@ -69,6 +88,13 @@ export default function Navigation() {
   return (
     <NavigationContainer ref={navigationRef}>
       <switchStack.Navigator>
+        <authStack.Screen
+          name='AuthLoading'
+          component={AuthLoadingScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
         <switchStack.Screen
           name='Auth'
           component={AuthFlow}

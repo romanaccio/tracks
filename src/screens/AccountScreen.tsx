@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Text, Button, Input } from 'react-native-elements';
+import { StyleSheet } from 'react-native';
+import { Text, Button } from 'react-native-elements';
 import Spacer from '../components/Spacer';
 import { Context as AuthContext, StateInterface } from '../context/AuthContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AccountScreen = () => {
   const { state, signout } = useContext(AuthContext);
   return (
-    <View style={styles.container}>
+    <SafeAreaView>
       <Spacer>
         <Text h3>Sign out from Tracker</Text>
       </Spacer>
@@ -20,16 +21,10 @@ const AccountScreen = () => {
           signout();
         }}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
 export default AccountScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    marginBottom: 200,
-  },
-});
+const styles = StyleSheet.create({});

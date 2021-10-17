@@ -31,7 +31,7 @@ const defaultState: StateInterface = {
 
 const authReducer = (state: StateInterface, action: ActionInterface) => {
   switch (action.type) {
-    case 'add_error':
+    case 'update_error_message':
       return { ...state, errorMessage: action.payload.errorMessage };
 
     case 'update_credentials':
@@ -55,17 +55,19 @@ const signup = (dispatch: Function) => {
         { email, password }
       );
       const data = response.data;
-      // 2. if successful, save token, update state, then go to main flow
-      await AsyncStorage.setItem('token', data.token);
+      const token = data.token;
+      // 2. if successful, save credentials, update state, then go to main flow
+      const jsonValue = JSON.stringify({ email, token });
+      await AsyncStorage.setItem('credentials', jsonValue);
       dispatch({
         type: 'update_credentials',
-        payload: { token: data.token, email },
+        payload: { token, email },
       });
       navigate('Tab', undefined);
     } catch (err) {
       // 3. if error, display an error somehow
       dispatch({
-        type: 'add_error',
+        type: 'update_error_message',
         payload: { errorMessage: 'Something went wrong during sign up' },
       });
     }
@@ -80,35 +82,57 @@ const signin = (dispatch: Function) => {
         { email, password }
       );
       const data = response.data;
-      // 2. if successful, save token, update state, then go to main flow
-      await AsyncStorage.setItem('token', data.token);
+      const token = data.token;
+      // 2. if successful, save credentials, update state, then go to main flow
+      const jsonValue = JSON.stringify({ email, token });
+      await AsyncStorage.setItem('credentials', jsonValue);
       dispatch({
         type: 'update_credentials',
-        payload: { token: data.token, email },
+        payload: { token, email },
       });
       navigate('Tab', undefined);
     } catch (err) {
       // 3. if error, display an error somehow
       console.log(err);
       dispatch({
-        type: 'add_error',
+        type: 'update_error_message',
         payload: { errorMessage: 'Something went wrong during sign in' },
       });
     }
   };
 };
 
-const signout = (dispatch: Function) => {
-  return async () => {
-    // 1. do something to sign out
-    await AsyncStorage.setItem('token', '');
-    dispatch({ type: 'sign_up', payload: { token: '', email: '' } });
+const signout = (dispatch: Function) => async () => {
+  // 1. do something to sign out
+  await AsyncStorage.setItem('credentials', '');
+  dispatch({ type: 'update_credentials', payload: { token: '', email: '' } });
+  navigate('Auth', undefined);
+};
+
+const clearErrorMessage = (dispatch: Function) => async () => {
+  dispatch({
+    type: 'update_error_message',
+    payload: { errorMessage: '' },
+  });
+};
+
+const tryLocalSignin = (dispatch: Function) => async () => {
+  const jsonValue = await AsyncStorage.getItem('credentials');
+
+  if (jsonValue) {
+    const { token, email } = JSON.parse(jsonValue);
+    dispatch({
+      type: 'update_credentials',
+      payload: { token, email },
+    });
+    navigate('Tab', undefined);
+  } else {
     navigate('Auth', undefined);
-  };
+  }
 };
 
 export const { Context, Provider } = createDataContext(
   authReducer,
-  { signup, signin, signout },
+  { signup, signin, signout, clearErrorMessage, tryLocalSignin },
   defaultState
 );

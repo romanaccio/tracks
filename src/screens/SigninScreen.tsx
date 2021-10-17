@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { StyleSheet, View, Pressable } from 'react-native';
-import { Text } from 'react-native-elements';
-import Spacer from '../components/Spacer';
+import { useFocusEffect } from '@react-navigation/native';
+
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Context as AuthContext, StateInterface } from '../context/AuthContext';
 import { AuthStackParamList } from '../types/types';
@@ -12,8 +12,15 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'Signin'>;
 
 const SigninScreen = ({ route, navigation }: Props) => {
   const authContext = useContext(AuthContext);
-  const signin = authContext.signin;
+  const { signin, clearErrorMessage } = authContext;
   const state: StateInterface = authContext.state;
+
+  useFocusEffect(
+    React.useCallback(() => {
+      clearErrorMessage();
+      return;
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
