@@ -66,6 +66,7 @@ const signup = (dispatch: Function) => {
       navigate('Tab', undefined);
     } catch (err) {
       // 3. if error, display an error somehow
+      console.log(err);
       dispatch({
         type: 'update_error_message',
         payload: { errorMessage: 'Something went wrong during sign up' },
