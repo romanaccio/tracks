@@ -32,12 +32,12 @@ const Map = () => {
       showsUserLocation={true}
       followsUserLocation={true}
     >
-      <Circle
+      {/*       <Circle
         center={currentLocation.coords}
         radius={30}
         strokeColor='rgba(158, 158, 255,1.0)'
         fillColor='rgba(158, 158, 255,0.3)'
-      />
+      /> */}
     </MapView>
   );
 };
