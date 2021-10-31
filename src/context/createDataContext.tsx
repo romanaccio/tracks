@@ -3,6 +3,7 @@ type Props = {
   children?: React.ReactNode;
 };
 
+// a generic wrapper to any context with reducer
 export default (
   reducer: any,
   actions: { [index: string]: Function },

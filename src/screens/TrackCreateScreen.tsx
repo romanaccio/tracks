@@ -1,27 +1,23 @@
-import React, { useEffect, useState } from 'react';
+// import '../misc/_mockLocation'; // uncomment to simulate a change of location every second
+
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, Button } from 'react-native-elements';
-import { requestForegroundPermissionsAsync } from 'expo-location';
+
+import {
+  Context as LocationContext,
+  StateInterface,
+} from '../context/LocationContext';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Map from '../components/Map';
+import useLocation from '../hooks/useLocation';
+
 const TrackCreateScreens = () => {
-  const [err, setErr] = useState(null);
-
-  const startWatching = async () => {
-    try {
-      const { granted } = await requestForegroundPermissionsAsync();
-      if (!granted) {
-        throw new Error('Location permission not granted');
-      }
-    } catch (e) {
-      setErr(e);
-    }
-  };
-
-  useEffect(() => {
-    startWatching();
-  }, []);
+  const locationContext = useContext(LocationContext);
+  const { startRecording, stopRecording, addLocation } = locationContext;
+  const state: StateInterface = locationContext.state;
+  const [err] = useLocation(addLocation);
 
   return (
     <SafeAreaView>
