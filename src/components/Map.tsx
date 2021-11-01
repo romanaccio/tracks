@@ -10,7 +10,7 @@ import { FontAwesome } from '@expo/vector-icons';
 const Map = () => {
   const locationContext = useContext(LocationContext);
   const state: StateInterface = locationContext.state;
-  const { currentLocation } = state;
+  const { currentLocation, locations } = state;
 
   console.log(state.locations.length);
   if (!currentLocation) {
@@ -24,26 +24,15 @@ const Map = () => {
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       }}
-      /*       region={{
-        ...currentLocation.coords,
-        latitudeDelta: 0.1,
-        longitudeDelta: 0.1,
-      }}
-      */
       showsUserLocation={true}
-      // followsUserLocation={true}
+      followsUserLocation={true}
       showsMyLocationButton={true}
       showsScale={true}
       showsCompass={true}
       zoomEnabled={true}
       // provider='google'
     >
-      {/*       <Circle
-        center={currentLocation.coords}
-        radius={30}
-        strokeColor='rgba(158, 158, 255,1.0)'
-        fillColor='rgba(158, 158, 255,0.3)'
-      /> */}
+      <Polyline coordinates={locations.map((loc) => loc.coords)}></Polyline>
       <View style={styles.buttonContainer}>
         <FontAwesome.Button
           style={styles.button}

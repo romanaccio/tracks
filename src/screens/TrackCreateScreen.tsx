@@ -22,7 +22,7 @@ const TrackCreateScreens = () => {
   const { recording } = state;
   const isFocused = useIsFocused();
 
-  const [err] = useLocation(isFocused, addLocation);
+  const [err] = useLocation(isFocused || recording, addLocation);
 
   return (
     <SafeAreaView>
