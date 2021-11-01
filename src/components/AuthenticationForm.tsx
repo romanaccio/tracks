@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, Button, Input } from 'react-native-elements';
 import Spacer from '../components/Spacer';
@@ -14,6 +14,7 @@ type Props = {
   errorMessage: string;
   onPress({ email, password }: CredentialsInterface): Function;
 };
+
 const AuthenticationForm = ({ title, errorMessage, onPress }: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
