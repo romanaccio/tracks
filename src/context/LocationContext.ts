@@ -42,7 +42,6 @@ const locationReducer = (state: StateInterface, action: ActionInterface) => {
     case 'stop_recording':
       return {
         ...state,
-        trackName: '',
         recording: false,
       };
     default:

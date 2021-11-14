@@ -32,6 +32,7 @@ const TrackCreateScreens = () => {
         startTracking={startRecording}
         stopTracking={stopRecording}
         recording={recording}
+        hasData={state.locations.length > 0}
       />
       {err ? <Text>Please enable location services</Text> : null}
     </SafeAreaView>

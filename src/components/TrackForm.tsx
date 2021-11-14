@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import Spacer from '../components/Spacer';
+import useSaveTrack from '../hooks/useSaveTrack';
 
 interface ITrackName {
   trackName: string;
@@ -11,9 +12,16 @@ type Props = {
   startTracking(trackName: string): Function;
   stopTracking(): Function;
   recording: boolean;
+  hasData: boolean;
 };
-const TrackForm = ({ startTracking, stopTracking, recording }: Props) => {
+const TrackForm = ({
+  startTracking,
+  stopTracking,
+  recording,
+  hasData,
+}: Props) => {
   const [trackName, setTrackName] = useState('');
+  const [saveTrack] = useSaveTrack();
 
   return (
     <>
@@ -38,6 +46,10 @@ const TrackForm = ({ startTracking, stopTracking, recording }: Props) => {
       ) : (
         <Button title='Stop Tracking' onPress={() => stopTracking()} />
       )}
+      <Spacer />
+      {!recording && hasData ? (
+        <Button title='Save track' onPress={saveTrack}></Button>
+      ) : null}
     </>
   );
 };
