@@ -4,7 +4,7 @@ export type AuthStackParamList = {
 };
 
 export type TabStackParamList = {
-  ListDetail: undefined;
+  ListDetail: ListDetailStackParamList;
   Account: undefined;
   TrackCreate: undefined;
 };
@@ -15,6 +15,6 @@ export type ListDetailStackParamList = {
 };
 
 export type MainStackParamList = {
-  Auth: undefined;
-  Tab: undefined;
+  Auth: AuthStackParamList;
+  Tab: TabStackParamList;
 };
