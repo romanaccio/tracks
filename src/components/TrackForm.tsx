@@ -1,26 +1,22 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import Spacer from '../components/Spacer';
+import { Context as LocationContext } from '../context/LocationContext';
 import useSaveTrack from '../hooks/useSaveTrack';
 
 interface ITrackName {
   trackName: string;
 }
 
-type Props = {
-  startTracking(trackName: string): Function;
-  stopTracking(): Function;
-  recording: boolean;
-  hasData: boolean;
-};
-const TrackForm = ({
-  startTracking,
-  stopTracking,
-  recording,
-  hasData,
-}: Props) => {
-  const [trackName, setTrackName] = useState('');
+const TrackForm = () => {
+  const {
+    state: { trackName, recording, locations },
+    startRecording,
+    stopRecording,
+    changeName,
+  } = useContext(LocationContext);
+
   const [saveTrack] = useSaveTrack();
 
   return (
@@ -30,7 +26,7 @@ const TrackForm = ({
       {!recording ? (
         <>
           <Input
-            onChangeText={setTrackName}
+            onChangeText={changeName}
             value={trackName}
             placeholder='Enter track name'
             autoCapitalize='words'
@@ -38,16 +34,13 @@ const TrackForm = ({
             clearButtonMode='always'
           />
 
-          <Button
-            title='Start Tracking'
-            onPress={() => startTracking(trackName)}
-          />
+          <Button title='Start Tracking' onPress={() => startRecording()} />
         </>
       ) : (
-        <Button title='Stop Tracking' onPress={() => stopTracking()} />
+        <Button title='Stop Tracking' onPress={() => stopRecording()} />
       )}
       <Spacer />
-      {!recording && hasData ? (
+      {!recording && locations.length ? (
         <Button title='Save track' onPress={saveTrack}></Button>
       ) : null}
     </>

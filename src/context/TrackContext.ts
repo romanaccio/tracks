@@ -1,5 +1,6 @@
 import createDataContext from './createDataContext';
 import { LocationObject } from 'expo-location';
+import trackerApi from '../API/tracker';
 
 export interface StateInterface {
   trackList: string[];
@@ -27,11 +28,18 @@ const fetchTrack = (dispatch: Function) => () => {
 };
 
 const createTrack =
-  (dispatch: Function) => (trackName: string, locations: LocationObject[]) => {
-    console.log(trackName, locations.length);
-    //   dispatch({
-    //     type: 'create_track',
-    //   });
+  (dispatch: Function) =>
+  async (trackName: string, locations: LocationObject[]) => {
+    await trackerApi.post('/tracks', {
+      name: trackName,
+      locations,
+    });
+    // dispatch({
+    //   type: 'create_track',
+    //   payload: {
+    //     trackList: [...state.trackList, trackName],
+    //   },
+    // });
   };
 
 export const { Context, Provider } = createDataContext(

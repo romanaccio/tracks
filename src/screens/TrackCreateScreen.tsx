@@ -17,8 +17,9 @@ import TrackForm from '../components/TrackForm';
 
 const TrackCreateScreens = () => {
   const locationContext = useContext(LocationContext);
-  const { startRecording, stopRecording, addLocation } = locationContext;
+  const { addLocation } = locationContext;
   const state: StateInterface = locationContext.state;
+  // console.log('TrackCreateScreen.tsx: state', state);
   const { recording } = state;
   const isFocused = useIsFocused();
 
@@ -28,12 +29,7 @@ const TrackCreateScreens = () => {
     <SafeAreaView>
       <Text h2>TrackCreateScreens</Text>
       <Map></Map>
-      <TrackForm
-        startTracking={startRecording}
-        stopTracking={stopRecording}
-        recording={recording}
-        hasData={state.locations.length > 0}
-      />
+      <TrackForm />
       {err ? <Text>Please enable location services</Text> : null}
     </SafeAreaView>
   );
