@@ -11,7 +11,7 @@ export type TabStackParamList = {
 
 export type ListDetailStackParamList = {
   TrackList: undefined;
-  TrackDetail: undefined;
+  TrackDetail: { _id: string } | undefined;
 };
 
 export type MainStackParamList = {

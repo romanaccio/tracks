@@ -2,8 +2,13 @@ import createDataContext from './createDataContext';
 import { LocationObject } from 'expo-location';
 import trackerApi from '../API/tracker';
 
+interface TrackInterface {
+  _id: string;
+  name: string;
+  locations: LocationObject[];
+}
 export interface StateInterface {
-  trackList: string[];
+  trackList: TrackInterface[];
 }
 
 export interface ActionInterface {
@@ -16,14 +21,19 @@ const defaultState: StateInterface = {
 };
 const trackReducer = (state: StateInterface, action: ActionInterface) => {
   switch (action.type) {
+    case 'fetch_tracks':
+      return { trackList: action.payload };
+
     default:
       return state;
   }
 };
 
-const fetchTrack = (dispatch: Function) => () => {
+const fetchTracks = (dispatch: Function) => async () => {
+  const response = await trackerApi.get('/tracks');
   dispatch({
-    type: 'fetch_track',
+    type: 'fetch_tracks',
+    payload: response.data,
   });
 };
 
@@ -44,6 +54,6 @@ const createTrack =
 
 export const { Context, Provider } = createDataContext(
   trackReducer,
-  { fetchTrack, createTrack },
+  { fetchTracks, createTrack },
   defaultState
 );
