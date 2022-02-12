@@ -23,8 +23,6 @@ const TrackListScreen = ({ route, navigation }: Props) => {
 
   return (
     <SafeAreaView>
-      <Text h2>TrackListScreen</Text>
-
       <FlatList
         data={state.trackList}
         keyExtractor={(item) => item._id}

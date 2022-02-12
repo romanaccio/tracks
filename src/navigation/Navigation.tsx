@@ -10,8 +10,8 @@ import AccountScreen from '../screens/AccountScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import { navigationRef } from '../navigation/navigationRef';
+import { FontAwesome } from '@expo/vector-icons';
 
 const authStack = createNativeStackNavigator();
 function AuthFlow() {
@@ -43,12 +43,17 @@ function ListDetailFlow() {
         name='TrackList'
         component={TrackListScreen}
         options={{
-          headerShown: false,
+          headerShown: true,
+          title: 'Tracks',
         }}
       />
       <listDetailStack.Screen
         name='TrackDetail'
         component={TrackDetailScreen}
+        options={{
+          headerShown: true,
+          title: 'Track Detail',
+        }}
       />
     </listDetailStack.Navigator>
   );
@@ -62,13 +67,18 @@ function TabFlow() {
         name='ListDetail'
         component={ListDetailFlow}
         options={{
+          title: 'Tracks',
           headerShown: false,
+          tabBarIcon: () => <FontAwesome name='th-list' size={20} />,
         }}
       />
       <tabStack.Screen
         name='TrackCreate'
         component={TrackCreateScreen}
         options={{
+          title: 'Create Track',
+          tabBarIcon: () => <FontAwesome name='plus' size={20} />,
+
           headerShown: false,
         }}
       />
@@ -76,6 +86,8 @@ function TabFlow() {
         name='Account'
         component={AccountScreen}
         options={{
+          tabBarIcon: () => <FontAwesome name='gear' size={20} />,
+
           headerShown: false,
         }}
       />
